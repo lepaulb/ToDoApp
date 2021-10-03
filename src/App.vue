@@ -1,8 +1,8 @@
 <template>
   <CreateTask @add-task="addTask" /><br /><br />
   <div v-bind:key="task" v-for="(task, index) in tasks">
-    <input type="checkbox" />
-    {{ task }}
+    <input type="checkbox" v-model="task.status" v-on:change="saveTasks" />
+    <input type="text" v-model="task.name" v-on:change="saveTasks" />
     <button v-on:click="removeTask(index)">x</button>
   </div>
 </template>
@@ -18,29 +18,35 @@ export default {
   data() {
     return {
       tasks: [],
-    };
+      taskId: 0,
+    };  
   },
   mounted() {
-    if (localStorage.getItem("tasks")) {
+    if (localStorage.taskId) {
       try {
         this.tasks = JSON.parse(localStorage.getItem("tasks"));
+        this.taskId = localStorage.taskId;
       } catch (e) {
         localStorage.removeItem("tasks");
       }
     }
-  //   this._keyListener = function (e) {
-  //     if (e.altKey && e.keyCode === 65) {
-  //       this.addTask("hello");
-  //     }
-  //   };
-  //   document.addEventListener("keydown", this._keyListener.bind(this));
-  // },
-  // beforeDestroy() {
-  //   document.removeEventListener("keydown", this._keyListener);
+    this._keyListener = function (e) {
+      if (e.keyCode == 32) {
+        let nextUncheck = this.tasks.findIndex((task) => task.status == false);
+        if (nextUncheck > -1) {
+          this.tasks[nextUncheck++].status = true;
+        }
+      }
+    };
+    document.addEventListener("keydown", this._keyListener.bind(this));
+  },
+  beforeDestroy() {
+    document.removeEventListener("keydown", this._keyListener);
   },
   methods: {
     addTask(e) {
-      this.tasks.push(e);
+      let taskObject = { id: this.taskId++, name: e, status: false };
+      this.tasks.push(taskObject);
       this.saveTasks();
     },
     removeTask(e) {
@@ -50,6 +56,8 @@ export default {
     saveTasks() {
       const parsed = JSON.stringify(this.tasks);
       localStorage.setItem("tasks", parsed);
+      localStorage.taskId = this.taskId;
+      console.log("saved");
     },
   },
 };
