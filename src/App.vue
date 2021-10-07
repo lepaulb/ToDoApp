@@ -1,8 +1,20 @@
 <template>
-  <CreateTask @add-task="addTask" /><br /><br />
-  <div v-bind:key="task" v-for="(task, index) in tasks">
-    <input type="checkbox" v-model="task.status" v-on:change="saveTasks" />
-    <input type="text" v-model="task.name" v-on:change="saveTasks" />
+  <CreateTask @add-task="addTask" />
+  <br /><br />
+  <div 
+    v-bind:key="task" 
+    v-for="(task, index) in tasks"
+  >
+    <input
+      type="checkbox" 
+      v-model="task.status" 
+      v-on:change="saveTasks" 
+    />
+    <input 
+      type="text" 
+      v-model="task.name" 
+      v-on:change="saveTasks" 
+    />
     <button v-on:click="removeTask(index)">x</button>
   </div>
 </template>
@@ -61,4 +73,5 @@ export default {
     },
   },
 };
+// API NEXT / FETCH VS AXIOS
 </script>
