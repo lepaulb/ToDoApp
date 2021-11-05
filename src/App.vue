@@ -108,6 +108,10 @@ export default {
       console.log("changeTaskStatus");
     },
 
+    hideGiphy() {
+      this.giphyToggle ? setTimeout(() => { this.giphyImgSrcA = "" }, 2000) : setTimeout(() => { this.giphyImgSrcB = "" }, 2000);
+    },
+
     async loadGiphy() {
       this.giphyToggle = !this.giphyToggle;
       this.giphyPosition = Math.floor(Math.random() * 100);
@@ -119,6 +123,7 @@ export default {
       } else {
         this.giphyImgSrcB = this.giphyImgSrc;
       }
+      this.hideGiphy();
       console.log("loadGiphy");
     }
   },
