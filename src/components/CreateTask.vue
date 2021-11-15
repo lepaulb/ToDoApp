@@ -1,5 +1,6 @@
 <template>
   <input
+    class="pt-10"
     type="text"
     id="taskinput"
     v-model="task"
