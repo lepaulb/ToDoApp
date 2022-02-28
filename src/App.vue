@@ -71,7 +71,6 @@ export default {
   data() {
     return {
       tasks: [],
-      taskId: 0,
       giphyPosition: 0,
       giphyImgSrc: null,
       giphyImgSrcA: null,
@@ -95,14 +94,13 @@ export default {
   mounted() {
     this.loadGiphy();
 
-    if (localStorage.taskId) {
-      try {
-        this.tasks = JSON.parse(localStorage.getItem('tasks'));
-        this.taskId = localStorage.taskId;
-      } catch (e) {
-        localStorage.removeItem('tasks');
-      }
+    // if (localStorage.taskId) {
+    try {
+      this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    } catch (e) {
+      localStorage.removeItem('tasks');
     }
+    // }
     // Listen to SPACE key to complete an to-do
     // Problem: this listener is also on while creating a new to-do
     // this._keyListener = function (e) {
@@ -123,17 +121,18 @@ export default {
   // },
   watch: {
     rewardType: function (newReward) {
+      clearTimeout(this.giphyTimeout);
       this.giphyImgSrc = null;
       this.giphyImgSrcA = null;
       this.giphyImgSrcB = null;
       this.giphyToggle = false;
       this.loadGiphy(newReward);
-      console.log('changed preloaded giphy to' + newReward);
+      console.log('changed preloaded giphy to ' + newReward);
     }
   },
   methods: {
     addTask(e) {
-      let taskObject = { id: this.taskId++, name: e, status: false };
+      let taskObject = { name: e, status: false };
       this.tasks.push(taskObject);
       this.saveTasks();
       console.log('addTask');
@@ -148,7 +147,6 @@ export default {
     saveTasks() {
       const parsed = JSON.stringify(this.tasks);
       localStorage.setItem('tasks', parsed);
-      localStorage.taskId = this.taskId;
       console.log('saveTasks');
     },
 
@@ -162,13 +160,13 @@ export default {
     },
 
     hideGiphy() {
-      this.giphyToggle
-        ? this.giphyTimeout = setTimeout(() => {
+      this.giphyTimeout = setTimeout(() => {
+        if ( this.giphyToggle ) {
           this.giphyImgSrcA = '';
-        }, 4000)
-        : this.giphyTimeout = setTimeout(() => {
+        } else {
           this.giphyImgSrcB = '';
-        }, 4000);
+        }
+      }, 4000 );
     },
 
     async loadGiphy(type = 'puppy') {

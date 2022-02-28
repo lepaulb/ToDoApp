@@ -12,7 +12,7 @@
     "vue": "^3.2.19"
   },
   "devDependencies": {
-    "@edwmurph/eslint-config": "^2.0.1",
+    "@edwmurph/eslint-config": "^3.3.0",
     "@vue/compiler-sfc": "^3.0.4",
     "autoprefixer": "^10.4.2",
     "postcss": "^8.4.6",
