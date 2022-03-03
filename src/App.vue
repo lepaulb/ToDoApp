@@ -1,43 +1,33 @@
 <template>
-  <!-- Create new task -->
-  <CreateTask @add-task="addTask" />
-  <br /><br />
-
-  <hr class="my-5" />
-  Choose reward
-  <input type="radio" id="one" value="puppy" v-model="rewardType" checked />
-  <label for="one">Puppy</label>
-  <input type="radio" id="two" value="sexy man" v-model="rewardType" />
-  <label for="two">Sexy man</label>
-  <input type="radio" id="three" value="sexy woman" v-model="rewardType" />
-  <label for="three">Sexy woman</label>
-  <div class="flex items-center">
-    <div>
-      <div class="h-52">
-        <hr class="my-5" />
-        <h3>Active tasks</h3>
-        <div v-bind:key="activeTask" v-for="(activeTask, index) in activeTasks">
-          <input
-            type="checkbox"
-            v-model="activeTask.status"
-            v-on:change="changeTaskStatus(activeTask)"
-          />
-          <input
-            type="text"
-            v-model="activeTask.name"
-            v-on:change="saveTasks"
-          />
-          <button v-on:click="removeTask(index)">x</button>
-        </div>
+  <div class="mt-10 mb-5 text-lg">
+    <!-- Create new task -->
+    <CreateTask @add-task="addTask" />
+  </div>
+    My reward:
+    <input type="radio" id="one" value="puppy" v-model="rewardType" checked />
+    <label for="one">Puppy</label>
+    <input type="radio" id="two" value="sexy man" v-model="rewardType" />
+    <label for="two">Sexy man</label>
+    <input type="radio" id="three" value="sexy woman" v-model="rewardType" />
+  <div class="flex text-lg my-10">
+    <div class="w-3/6">
+     Stuff to do
+      <div v-bind:key="activeTask" v-for="(activeTask, index) in activeTasks">
+            <input
+              type="checkbox"
+              v-model="activeTask.status"
+              v-on:change="changeTaskStatus(activeTask)"
+            />
+            <input
+              type="text"
+              v-model="activeTask.name"
+              v-on:change="saveTasks"
+            />
+            <button v-on:click="removeTask(index)">x</button>
       </div>
-
-      <hr class="my-5" />
-      <h3>Reward</h3>
-        <img v-show="giphyToggle" v-bind:src="giphyImgSrcA" />
-        <img v-show="!giphyToggle" v-bind:src="giphyImgSrcB" />
-
-      <hr class="my-5" />
-      <h3>Completed tasks</h3>
+    </div>
+    <div class="w-3/6">
+      Stuff completed
       <div
         v-bind:key="completedTask"
         v-for="(completedTask, index) in completedTasks"
@@ -56,6 +46,10 @@
       </div>
     </div>
   </div>
+  <!-- <div class="absolute inset-0 bg-red-500" v-show="(giphyImgSrcA != '' || giphyImgSrcB != '') && !giphyToggle"> -->
+    <img v-show="giphyToggle" v-bind:src="giphyImgSrcA" />
+    <img v-show="!giphyToggle" v-bind:src="giphyImgSrcB" />
+  <!-- </div> -->
 </template>
 
 <script>
@@ -92,33 +86,19 @@ export default {
   },
 
   mounted() {
+
+    // Load the first gif
     this.loadGiphy();
 
-    // if (localStorage.taskId) {
+    // Load stored tasks
     try {
       this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     } catch (e) {
       localStorage.removeItem('tasks');
     }
-    // }
-    // Listen to SPACE key to complete an to-do
-    // Problem: this listener is also on while creating a new to-do
-    // this._keyListener = function (e) {
-    //   if (e.keyCode == 32) {
-    //     let nextUncheck = this.tasks.findIndex((task) => task.status == false);
-    //     if (nextUncheck > -1) {
-    //       this.tasks[nextUncheck].status = !this.tasks[nextUncheck].status;
-    //       this.changeTaskStatus(this.tasks[nextUncheck].status);
-    //     }
-    //   }
-    // };
-    // document.addEventListener("keydown", this._keyListener.bind(this));
+
   },
 
-  // Destroy the key event listener
-  // beforeDestroy() {
-  //   document.removeEventListener("keydown", this._keyListener);
-  // },
   watch: {
     rewardType: function (newReward) {
       clearTimeout(this.giphyTimeout);
@@ -132,7 +112,7 @@ export default {
   },
   methods: {
     addTask(e) {
-      let taskObject = { name: e, status: false };
+      let taskObject = { name: e, status: false, created: Date.now() };
       this.tasks.push(taskObject);
       this.saveTasks();
       console.log('addTask');
@@ -140,8 +120,8 @@ export default {
 
     removeTask(e) {
       this.tasks.splice(e, 1);
+      console.log('removeTask');
       this.saveTasks();
-      console.log('remoteTask');
     },
 
     saveTasks() {

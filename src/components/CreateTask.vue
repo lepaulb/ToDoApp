@@ -2,11 +2,18 @@
   <input
     type="text"
     ref="taskinput"
+    placeholder="Something epic you'll do"
     v-model="task"
     v-on:keyup.enter="createTask"
     v-on:keyup.esc="removeFocus"
+    class="w-96 border-0 outline-0 text-lg"
   />
-  <button @click="createTask">Create</button>
+  <button @click="createTask"
+    class="
+    text-white px-5 py-1 rounded-lg border-0 text-lg
+    bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 cursor-pointer
+    "
+  >Add</button>
 </template>
 
 <script>
