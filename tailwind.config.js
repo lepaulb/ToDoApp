@@ -1,19 +1,14 @@
 module.exports = {
-  mode: 'jit',
-  purge: [
-    './*.html',
-    './src/**/*.vue',
-    './src/*.{js,vue}',
+  mode:'jit',
+  content: [
+    './index.html',
+    './src/**/*.{vue,js,ts,jsx,tsx}'
   ],
-  darkMode: false, // or 'media' or 'class'
-  theme: {
-    extend: {},
-  },
-  variants: {
-    extend: {},
-  },
-  plugins: [],
   corePlugins: {
-    preflight: false, // disabling Tailwind Preflight https://tailwindcss.com/docs/preflight
-  } 
-}
+    preflight: false
+  },
+  theme: {
+    extend: {}
+  },
+  plugins: []
+};

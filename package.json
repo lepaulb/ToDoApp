@@ -3,17 +3,20 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "lint": "eslint . --ext .js,.vue",
+    "lint:fix": "eslint . --fix --ext .js,.vue"
   },
   "dependencies": {
     "axios": "^0.21.1",
     "vue": "^3.2.19"
   },
   "devDependencies": {
+    "@edwmurph/eslint-config": "^3.3.0",
     "@vue/compiler-sfc": "^3.0.4",
-    "autoprefixer": "^10.3.6",
-    "postcss": "^8.3.8",
-    "tailwindcss": "^2.2.16",
+    "autoprefixer": "^10.4.2",
+    "postcss": "^8.4.6",
+    "tailwindcss": "^3.0.23",
     "vite": "^1.0.0-rc.13"
   }
 }

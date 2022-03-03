@@ -1,8 +1,7 @@
 <template>
   <input
-    class="pt-10"
     type="text"
-    id="taskinput"
+    ref="taskinput"
     v-model="task"
     v-on:keyup.enter="createTask"
     v-on:keyup.esc="removeFocus"
@@ -12,23 +11,23 @@
 
 <script>
 export default {
-  name: "CreateTask",
-  emits: ["add-task"],
+  name: 'CreateTask',
+  emits: ['add-task'],
   data() {
     return {
-      task: null,
+      task: null
     };
   },
   methods: {
     createTask() {
       if (this.task) {
-        this.$emit("add-task", this.task);
-        this.task = "";
+        this.$emit('add-task', this.task);
+        this.task = '';
       }
     },
     removeFocus() {
-      taskinput.blur();
-    },
-  },
+      this.$refs.taskinput.blur();
+    }
+  }
 };
 </script>
