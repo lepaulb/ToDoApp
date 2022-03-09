@@ -9,6 +9,7 @@
     <input type="radio" id="two" value="sexy man" v-model="rewardType" />
     <label for="two">Sexy man</label>
     <input type="radio" id="three" value="sexy woman" v-model="rewardType" />
+    <label for="three">Sexy woman</label>
   <div class="flex text-lg my-10">
     <div class="w-3/6">
      Stuff to do
@@ -77,11 +78,11 @@ export default {
 
   computed: {
     activeTasks() {
-      return this.tasks.filter((task) => !task.status);
+      return this.tasks.filter( ( task ) => !task.status );
     },
 
     completedTasks() {
-      return this.tasks.filter((task) => task.status);
+      return this.tasks.filter( ( task ) => task.status );
     }
   },
 
@@ -90,57 +91,69 @@ export default {
     // Load the first gif
     this.loadGiphy();
 
-    // Load stored tasks
     try {
-      this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    } catch (e) {
+
+      const tasks = JSON.parse( localStorage.getItem('tasks') ) || [];
+      this.tasks = tasks.filter( task => {
+        // UPDATE THIS
+        if ( task.created > new Date( Date.now() - 60e3 * 60 * 24 * 7 ) ) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      localStorage.setItem( 'tasks', this.tasks );
+
+    } catch ( e ) {
+
       localStorage.removeItem('tasks');
+
     }
 
   },
 
   watch: {
-    rewardType: function (newReward) {
-      clearTimeout(this.giphyTimeout);
+    rewardType: function ( newReward ) {
+      clearTimeout( this.giphyTimeout );
       this.giphyImgSrc = null;
       this.giphyImgSrcA = null;
       this.giphyImgSrcB = null;
       this.giphyToggle = false;
-      this.loadGiphy(newReward);
-      console.log('changed preloaded giphy to ' + newReward);
+      this.loadGiphy( newReward );
+      console.log( 'changed preloaded giphy to ' + newReward );
     }
   },
   methods: {
-    addTask(e) {
-      let taskObject = { name: e, status: false, created: Date.now() };
-      this.tasks.push(taskObject);
+    addTask( e ) {
+      const taskObject = { name: e, status: false, created: Date.now() };
+      this.tasks.push( taskObject );
       this.saveTasks();
       console.log('addTask');
     },
 
-    removeTask(e) {
-      this.tasks.splice(e, 1);
+    removeTask( e ) {
+      this.tasks.splice( e, 1 );
       console.log('removeTask');
       this.saveTasks();
     },
 
     saveTasks() {
-      const parsed = JSON.stringify(this.tasks);
-      localStorage.setItem('tasks', parsed);
+      const parsed = JSON.stringify( this.tasks );
+      localStorage.setItem( 'tasks', parsed );
       console.log('saveTasks');
     },
 
-    changeTaskStatus(e) {
-      clearTimeout(this.giphyTimeout);
+    changeTaskStatus( e ) {
+      clearTimeout( this.giphyTimeout );
       this.saveTasks();
       console.log('changeTaskStatus');
-      if (e.status) {
-        this.loadGiphy(this.rewardType);
+      if ( e.status ) {
+        this.loadGiphy( this.rewardType );
       }
     },
 
     hideGiphy() {
-      this.giphyTimeout = setTimeout(() => {
+      this.giphyTimeout = setTimeout( () => {
         if ( this.giphyToggle ) {
           this.giphyImgSrcA = '';
         } else {
@@ -149,9 +162,9 @@ export default {
       }, 4000 );
     },
 
-    async loadGiphy(type = 'puppy') {
+    async loadGiphy( type = 'puppy' ) {
       this.giphyToggle = !this.giphyToggle;
-      this.giphyPosition = Math.floor(Math.random() * 100);
+      this.giphyPosition = Math.floor( Math.random() * 100 );
 
       const response = await axios.get(
         'http://api.giphy.com/v1/gifs/search?' +
@@ -164,7 +177,7 @@ export default {
 
       this.giphyImgSrc = response.data.data[0].images.fixed_height.webp;
 
-      if (this.giphyToggle == false) {
+      if ( this.giphyToggle == false ) {
         this.giphyImgSrcA = this.giphyImgSrc;
       } else {
         this.giphyImgSrcB = this.giphyImgSrc;

@@ -27,8 +27,8 @@ export default {
   },
   methods: {
     createTask() {
-      if (this.task) {
-        this.$emit('add-task', this.task);
+      if ( this.task ) {
+        this.$emit( 'add-task', this.task );
         this.task = '';
       }
     },

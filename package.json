@@ -14,7 +14,7 @@
     "vue": "^3.2.25"
   },
   "devDependencies": {
-    "@edwmurph/eslint-config": "^3.3.1",
+    "@edwmurph/eslint-config": "^4.0.0",
     "@vitejs/plugin-vue": "^2.2.0",
     "autoprefixer": "^10.4.2",
     "postcss": "^8.4.7",
